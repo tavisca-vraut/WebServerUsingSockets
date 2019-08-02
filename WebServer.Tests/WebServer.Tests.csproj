@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SocketRequest\SocketRequest.csproj" />
     <ProjectReference Include="..\SocketResponse\SocketResponse.csproj" />
   </ItemGroup>
 
