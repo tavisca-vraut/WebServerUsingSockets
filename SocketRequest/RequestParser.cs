@@ -9,6 +9,7 @@ namespace SocketRequest
 
         private List<ILineParser> lineParsersFactory = new List<ILineParser>()
         {
+            new RequestMetaDataParser(),
             new UrlParametersLineParser(),
             new StatusLineParser()
         };

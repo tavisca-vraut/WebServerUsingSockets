@@ -16,8 +16,8 @@ namespace SocketRequest
         public void Process(string line, ref HttpRequest requestObject)
         {
             var statusData = line.Split(' ');
-            requestObject.MethodType = statusData[0];
-            requestObject.Url = statusData[1];
+            requestObject.MethodType = statusData[0].Trim();
+            requestObject.Url = statusData[1].Trim();
         }
         private bool IsStatusLine(string line, ref HttpRequest requestObject)
         {

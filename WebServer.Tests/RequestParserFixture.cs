@@ -80,6 +80,40 @@ namespace WebServer.Tests
 
             var requestObject = parser.GetRequestObject();
 
+            requestObject.Host.Should().Be("www.test.com");
+        }
+
+        [Fact]
+        public void Request_message_parser()
+        {
+            string rawMessage = "GET /test/url.com HTTP/1.1\n" +
+                                "Host: www.test.com\n" +
+                                "Accept: image / gif, image / jpeg, */*\n" +
+                                "Accept-Language: en-us\n" +
+                                "Accept-Encoding: gzip, deflate\n" +
+                                "User-Agent: Mozilla/4.0\n" +
+                                "Content-Length: 35\n" +
+                                "\n" +
+                                "bookId=12345&author=Tan+Ah+Teck\n";
+
+            var parser = new RequestParser(rawMessage);
+            parser.ProcessEachLineOfRequest();
+
+            var requestObject = parser.GetRequestObject();
+
+            Assert.Equal("GET", requestObject.MethodType);
+
+            requestObject.MethodType.Should().Be("GET");
+            requestObject.Url.Should().Be("/test/url.com");
+            requestObject.HttpVersion.Should().Be("HTTP/1.1");
+            requestObject.Host.Should().Be("www.test.com");
+            requestObject.Accept.Should().Be("image / gif, image / jpeg, */*");
+            requestObject.AcceptLanguage.Should().Be("en-us");
+            requestObject.AcceptEncoding.Should().Be("gzip, deflate");
+            requestObject.UserAgent.Should().Be("Mozilla/4.0");
+            requestObject.ContentLength.Should().Be("35");
+            requestObject.UrlParameters["bookId"].Should().Be("12345");
+            requestObject.UrlParameters["author"].Should().Be("Tan Ah Teck");
         }
     }
 }

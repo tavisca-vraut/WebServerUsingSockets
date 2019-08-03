@@ -32,7 +32,7 @@ namespace SocketRequest
             {
                 var keyValue = parameter.Split('=');
                 var key = keyValue[0].Trim();
-                var value = keyValue[1].Trim();
+                var value = keyValue[1].Trim().Replace("+", " ");
 
                 requestObject.UrlParameters[key] = value;
             }
