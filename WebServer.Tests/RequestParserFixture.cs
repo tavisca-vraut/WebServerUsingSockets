@@ -25,11 +25,61 @@ namespace WebServer.Tests
             string rawMessage = "GET /test/index.html HTTP/1.1";
 
             var parser = new RequestParser(rawMessage);
-            parser.BeginParsing();
+            parser.ProcessEachLineOfRequest();
+            var requestObject = parser.GetRequestObject();
 
-            parser.GetRequestObject().MethodType.Should().Be("GET");
-            parser.GetRequestObject().Url.Should().Be("/test/index.html");
-            parser.GetRequestObject().HttpVersion.Should().Be("HTTP/1.1");
+            requestObject.MethodType.Should().Be("GET");
+            requestObject.Url.Should().Be("/test/index.html");
+            requestObject.HttpVersion.Should().Be("HTTP/1.1");
+        }
+
+        [Fact]
+        public void Singel_url_parameter_line_parsing_test()
+        {
+            string rawMessage = "bookId=12345";
+
+            var parser = new RequestParser(rawMessage);
+            parser.ProcessEachLineOfRequest();
+
+            var requestObject = parser.GetRequestObject();
+
+            var urlParameters = new Dictionary<string, string>()
+            {
+                { "bookId", "12345" }
+            };
+
+            requestObject.UrlParameters.Keys.Should().BeEquivalentTo(urlParameters.Keys);
+        }
+
+        [Fact]
+        public void Multiple_url_parameters_line_parsing_test()
+        {
+            string rawMessage = "bookId=12345&author=Tan+Ah+Teck";
+
+            var parser = new RequestParser(rawMessage);
+            parser.ProcessEachLineOfRequest();
+
+            var requestObject = parser.GetRequestObject();
+
+            var urlParameters = new Dictionary<string, string>()
+            {
+                { "bookId", "12345" },
+                { "author", "Tan Ah Teck" }
+            };
+
+            requestObject.UrlParameters.Keys.Should().BeEquivalentTo(urlParameters.Keys);
+        }
+
+        [Fact]
+        public void Request_metadata_line_parsing_test()
+        {
+            string rawMessage = "Host: www.test.com";
+
+            var parser = new RequestParser(rawMessage);
+            parser.ProcessEachLineOfRequest();
+
+            var requestObject = parser.GetRequestObject();
+
         }
     }
 }

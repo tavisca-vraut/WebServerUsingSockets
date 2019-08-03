@@ -1,26 +1,39 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace SocketRequest
 {
     public class RequestParser
     {
         public string RawMessage { get; private set; }
-        private HttpRequest RequestObject { get; set; }
+        private HttpRequest RequestObject;
+
+        private List<ILineParser> lineParsersFactory = new List<ILineParser>()
+        {
+            new UrlParametersLineParser(),
+            new StatusLineParser()
+        };
 
         public RequestParser(string requestMessage)
         {
             this.RawMessage = requestMessage;
+            this.RequestObject = new HttpRequest();
         }
 
-        public void BeginParsing()
+        public void ProcessEachLineOfRequest()
         {
-            this.RequestObject = new HttpRequest();
+            foreach (var line in RawMessage.Split('\n'))
+            {
+                Parse(line);
+            }
+        }
 
-            var split = this.RawMessage.Split(' ');
-
-            this.RequestObject.MethodType = split[0];
-            this.RequestObject.Url = split[1];
-            this.RequestObject.HttpVersion = split[2];
+        private void Parse(string line)
+        {
+            foreach (var parser in lineParsersFactory)
+            {
+                if (parser.TryParse(line, ref RequestObject) == true)
+                    return;
+            }
         }
 
         public HttpRequest GetRequestObject()
