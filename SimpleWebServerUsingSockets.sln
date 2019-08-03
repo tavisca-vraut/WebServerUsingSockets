@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketResponse", "SocketRes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketRequest", "SocketRequest\SocketRequest.csproj", "{28591008-3745-4D9C-BF14-4B57ACAA8CD6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClientRequestHandler", "ClientRequestHandler\ClientRequestHandler.csproj", "{34C9ECA6-F4D6-418B-8722-55681EA42F69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{28591008-3745-4D9C-BF14-4B57ACAA8CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28591008-3745-4D9C-BF14-4B57ACAA8CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28591008-3745-4D9C-BF14-4B57ACAA8CD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34C9ECA6-F4D6-418B-8722-55681EA42F69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34C9ECA6-F4D6-418B-8722-55681EA42F69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34C9ECA6-F4D6-418B-8722-55681EA42F69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34C9ECA6-F4D6-418B-8722-55681EA42F69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

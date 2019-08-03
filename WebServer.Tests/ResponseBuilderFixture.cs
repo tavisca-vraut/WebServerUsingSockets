@@ -12,13 +12,13 @@ namespace WebServer.Tests
         [Fact]
         public void Response_http_version_test()
         {
-            ResponseBuilder.HttpVersion.Should().Be("HTTP/1.1");
+            HttpResponse.HttpVersion.Should().Be("HTTP/1.1");
         }
 
         [Fact]
         public void Response_server_name_test()
         {
-            ResponseBuilder.Server.Should().Be("Localhost (RV): Windows 10 64-bit");
+            HttpResponse.Server.Should().Be("Localhost (RV): Windows 10 64-bit");
         }
 
         [Fact]
@@ -28,60 +28,53 @@ namespace WebServer.Tests
 
             var currentDateTime = DateTime.Now;
 
-            response.Date = currentDateTime;
-            response.Date.Should().Be(currentDateTime);
+            response.httpResponse.Date = currentDateTime;
+            response.httpResponse.Date.Should().Be(currentDateTime);
         }
 
         [Fact]
         public void Response_set_content_length_test()
         {
-            var response = new ResponseBuilder
-            {
-                ContentLength = 100
-            };
+            var response = new ResponseBuilder();
+            response.httpResponse.ContentLength = 100;
 
-            response.ContentLength.Should().Be(100);
+            response.httpResponse.ContentLength.Should().Be(100);
         }
 
         [Fact]
         public void Response_set_content_type_test()
         {
-            var response = new ResponseBuilder
-            {
-                ContentType = "text/html"
-            };
+            var response = new ResponseBuilder();
+            response.httpResponse.ContentType = "text/html";
 
-            response.ContentType.Should().Be("text/html");
+            response.httpResponse.ContentType.Should().Be("text/html");
         }
 
         [Fact]
         public void Response_set_status_code_test()
         {
-            var response = new ResponseBuilder
-            {
-                StatusCode = 200
-            };
-            response.StatusCode.Should().Be(200);
+            var response = new ResponseBuilder();
+            response.httpResponse.StatusCode = 200;
+
+            response.httpResponse.StatusCode.Should().Be(200);
         }
 
         [Fact]
         public void Response_set_status_message_test()
         {
-            var response = new ResponseBuilder
-            {
-                StatusMessage = "OK"
-            };
-            response.StatusMessage.Should().Be("OK");
+            var response = new ResponseBuilder();
+
+            response.httpResponse.StatusMessage = "OK";
+            response.httpResponse.StatusMessage.Should().Be("OK");
         }
 
         [Fact]
         public void Response_set_data_test()
         {
-            var response = new ResponseBuilder
-            {
-                Data = Encoding.ASCII.GetBytes("OK")
-            };
-            response.Data.Should().BeEquivalentTo(Encoding.ASCII.GetBytes("OK"));
+            var response = new ResponseBuilder();
+            response.httpResponse.Data = Encoding.ASCII.GetBytes("OK");
+
+            response.httpResponse.Data.Should().BeEquivalentTo(Encoding.ASCII.GetBytes("OK"));
         }
 
         [Fact]
@@ -95,25 +88,24 @@ namespace WebServer.Tests
             var dateTime = DateTime.Now;
 
             var expectedResponseBuilder = new StringBuilder();
-            expectedResponseBuilder.AppendLine($"{ResponseBuilder.HttpVersion} {statusCode} {statusMessage}");
+            expectedResponseBuilder.AppendLine($"{HttpResponse.HttpVersion} {statusCode} {statusMessage}");
             expectedResponseBuilder.AppendLine($"Date: {dateTime.ToString("ddd, dd MMM yyyy hh:mm:ss IST")}");
-            expectedResponseBuilder.AppendLine($"Server: {ResponseBuilder.Server}");
+            expectedResponseBuilder.AppendLine($"Server: {HttpResponse.Server}");
             expectedResponseBuilder.AppendLine($"Content-Length: {contentLength}");
             expectedResponseBuilder.AppendLine($"Content-Type: {contentType}");
             expectedResponseBuilder.AppendLine();
 
-            var responseObject = new ResponseBuilder
-            {
-                StatusCode = 200,
-                StatusMessage = "OK",
-                Data = Encoding.ASCII.GetBytes(data),
-                ContentType = contentType,
-                ContentLength = contentLength,
-                Date = dateTime
-            };
+            var responseObject = new ResponseBuilder();
+
+            responseObject.httpResponse.StatusCode = 200;
+            responseObject.httpResponse.StatusMessage = "OK";
+            responseObject.httpResponse.Data = Encoding.ASCII.GetBytes(data);
+            responseObject.httpResponse.ContentType = contentType;
+            responseObject.httpResponse.ContentLength = contentLength;
+            responseObject.httpResponse.Date = dateTime;
 
             responseObject.BuildResponseHeaderString();
-            responseObject.ResponseMessage.Should().BeEquivalentTo(expectedResponseBuilder);
+            responseObject.httpResponse.ResponseMessage.Should().BeEquivalentTo(expectedResponseBuilder);
         }
 
         [Fact]
@@ -127,9 +119,9 @@ namespace WebServer.Tests
             var dateTime = DateTime.Now;
 
             var expectedResponseBuilder = new StringBuilder();
-            expectedResponseBuilder.AppendLine($"{ResponseBuilder.HttpVersion} {statusCode} {statusMessage}");
+            expectedResponseBuilder.AppendLine($"{HttpResponse.HttpVersion} {statusCode} {statusMessage}");
             expectedResponseBuilder.AppendLine($"Date: {dateTime.ToString("ddd, dd MMM yyyy hh:mm:ss IST")}");
-            expectedResponseBuilder.AppendLine($"Server: {ResponseBuilder.Server}");
+            expectedResponseBuilder.AppendLine($"Server: {HttpResponse.Server}");
             expectedResponseBuilder.AppendLine($"Content-Length: {contentLength}");
             expectedResponseBuilder.AppendLine($"Content-Type: {contentType}");
             expectedResponseBuilder.AppendLine();
@@ -138,15 +130,14 @@ namespace WebServer.Tests
             exptedResponse.AddRange(Encoding.ASCII.GetBytes(expectedResponseBuilder.ToString()));
             exptedResponse.AddRange(Encoding.ASCII.GetBytes(data));
 
-            var responseObject = new ResponseBuilder
-            {
-                StatusCode = 200,
-                StatusMessage = "OK",
-                Data = Encoding.ASCII.GetBytes(data),
-                ContentType = contentType,
-                ContentLength = contentLength,
-                Date = dateTime
-            };
+            var responseObject = new ResponseBuilder();
+
+            responseObject.httpResponse.StatusCode = 200;
+            responseObject.httpResponse.StatusMessage = "OK";
+            responseObject.httpResponse.Data = Encoding.ASCII.GetBytes(data);
+            responseObject.httpResponse.ContentType = contentType;
+            responseObject.httpResponse.ContentLength = contentLength;
+            responseObject.httpResponse.Date = dateTime;
 
             responseObject.GetResponseAsBytes().ToString().Should().BeEquivalentTo(exptedResponse.ToArray().ToString());
         }

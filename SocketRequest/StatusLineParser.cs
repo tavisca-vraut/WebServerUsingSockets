@@ -16,6 +16,9 @@ namespace SocketRequest
         public void Process(string line, ref HttpRequest requestObject)
         {
             var statusData = line.Split(' ');
+
+            if (statusData.Length != 3) throw new Exception("Status line format incorrect.");
+
             requestObject.MethodType = statusData[0].Trim();
             requestObject.Url = statusData[1].Trim();
         }
