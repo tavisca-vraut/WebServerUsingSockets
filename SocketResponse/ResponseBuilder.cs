@@ -17,6 +17,11 @@ namespace SocketResponse
             return GenerateResponseBytes();
         }
 
+        public string GetResponseAsString()
+        {
+            return Encoding.ASCII.GetString(GetResponseAsBytes());
+        }
+
         private byte[] GenerateResponseBytes()
         {
             List<byte> response = new List<byte>();

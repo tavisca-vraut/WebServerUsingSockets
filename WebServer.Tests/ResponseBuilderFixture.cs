@@ -139,7 +139,9 @@ namespace WebServer.Tests
             responseObject.httpResponse.ContentLength = contentLength;
             responseObject.httpResponse.Date = dateTime;
 
-            responseObject.GetResponseAsBytes().ToString().Should().BeEquivalentTo(exptedResponse.ToArray().ToString());
+            Encoding.ASCII.GetString(responseObject.GetResponseAsBytes())
+                .Should()
+                .BeEquivalentTo(Encoding.ASCII.GetString(exptedResponse.ToArray()));
         }
     }
 }

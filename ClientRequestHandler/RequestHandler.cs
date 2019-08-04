@@ -2,35 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using SocketRequest;
+using SocketResponse;
 
 namespace ClientRequestHandler
 {
-    public interface IParticularRequestTypeHandler
-    {
-        bool TryProcess(HttpRequest request);
-        void Process(HttpRequest request);
-    }
-
-    public class GetRequestHandler : IParticularRequestTypeHandler
-    {
-        public bool TryProcess(HttpRequest request)
-        {
-            if (request.MethodType.ToUpper() != "GET")
-                return false;
-
-            Process(request);
-            return true;
-        }
-        public void Process(HttpRequest request)
-        {
-            //throw new NotImplementedException();
-        }
-    }
-
     public class RequestHandler
     {
         public string RawRequestMessage;
         public RequestParser RequestParser;
+        public ResponseBuilder responseBuilder;
 
         public readonly List<IParticularRequestTypeHandler> availableRequestTypeHandlers = new List<IParticularRequestTypeHandler>()
         {
@@ -58,15 +38,25 @@ namespace ClientRequestHandler
             return true;
         }
 
-        public bool TryProcessRequest()
+        public bool TryProcessRequestType()
         {
             foreach (var requestTypeHandler in availableRequestTypeHandlers)
             {
-                if (requestTypeHandler.TryProcess(RequestParser.GetRequestObject()) == true)
+                if (requestTypeHandler.TryProcess(RequestParser.GetRequestObject(), out responseBuilder) == true)
                     return true;
             }
 
             return false;
+        }
+
+        public byte[] GetResponseAsBytes()
+        {
+            return responseBuilder.GetResponseAsBytes();
+        }
+
+        public string GetResponseAsString()
+        {
+            return responseBuilder.GetResponseAsString();
         }
     }
 }
