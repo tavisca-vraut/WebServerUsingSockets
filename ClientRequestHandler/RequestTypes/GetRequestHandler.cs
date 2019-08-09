@@ -16,8 +16,16 @@ namespace ClientRequestHandler
         {
             responseBuilder = null;
 
-            if (request.MethodType.ToUpper() != "GET")
-                return false;
+            try
+            {
+                if (request.MethodType.ToUpper() != "GET")
+                    return false;
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("No request object found");
+            }
+            
 
             Process(request, out responseBuilder);
             return true;
